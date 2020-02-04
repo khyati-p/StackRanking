@@ -4,17 +4,17 @@ Created on Wed Jan 22 18:08:24 2020
 
 @author: khyati
 """
-def function(inputlist):
+def work_exp(inputlist):
     import json
     import os
     from datetime import datetime
     import operator
-    
+    #mypathh='C:/Users/khyati/Downloads/Stack Ranking/SovrenProductDemo-BimetricScoring-20191129072019/TargetDocuments/'
     #mypath='C:/Users/khyati/Downloads/Stack Ranking/SovrenProductDemo-BimetricScoring-20191118123425/SourceDocument/'
     mypathh='C:/Users/khyati/Downloads/Stack Ranking/SovrenProductDemo-BimetricScoring-20191118123425/TargetDocuments/'
     '''
     #mypath='C:/Users/khyati/Downloads/Stack Ranking/SovrenProductDemo-BimetricScoring-20191129072019/SourceDocument/'
-    #mypathh='C:/Users/khyati/Downloads/Stack Ranking/SovrenProductDemo-BimetricScoring-20191129072019/TargetDocuments/'
+    
     l=[]
     for f in os.listdir(mypath):
         #print(f)
@@ -171,15 +171,23 @@ def function(inputlist):
         #resl={}
         recent=1000
         exp_max=50
-        #print(i)
+        print(i)
         for j in comp_str[i]:
             #print(j)
             for k in range(len(comp_str[i][j])):
-                #for _ in range(len(comp_str[i][j][k])):             
+                #for _ in range(len(comp_str[i][j][k])):  
+                totalexp=0
+                cc=0
                 for title in comp_str[i][j][k]:
+                    
+                    for key in comp_str[i][j][k][title]:
+                        if key=="experience":
+                            totalexp=totalexp+comp_str[i][j][k][title][key]
+                    count=0
                     if title !="":
                         resume_list=title.split("/")
                         #print(resume_list)
+                        cc=cc+len(resume_list)   
                         for z in range(len(l)):
                             for zz in l[z]:
                                 for jdkeys in l[z][zz]:
@@ -188,72 +196,259 @@ def function(inputlist):
                                     if jdkeys=='Experience':
                                         jdexp=l[z][zz]['Experience']
                                 #print(jdcc,jdexp)
-                                if zz in resume_list:
-                                    #print(z)
-                                    for key in comp_str[i][j][k][title]:
-                                        if key!="experience" and key!="CategoryCode":
-                                             #print(key,len(key),type(comp_str[i][j][k][title][key]),"dsv ")
-                                             currentMonth = datetime.now().month
-                                             currentYear = datetime.now().year
-                                             ld=str(currentYear)+"-"+str(currentMonth)
-                                             #sd=value.split("-")
-                                             if len(key)==4:
-                                                 sd=comp_str[i][j][k][title][key]+"-00"
-                                                 print(sd,"fdkb")
-                                             sd=comp_str[i][j][k][title][key].split("-")
-                                             ld=ld.split("-")
-                                             #print(sd,ld)
-                                             sd=sd[:2]
-                                             ld=ld[:2]
-                                             nl=[]
-                                            
-                                             #print(sd,ld)
-                                             for _ in range(len(sd)):
-                                                 nl.append(int(ld[_])-int(sd[_]))
-                                             nl[0]=nl[0]*12
-                                             new_recent=nl[0]+nl[1]
-                                             if new_recent<recent:
-                                                 recent=new_recent/12
-                                             #resl.append(recent)
-                                             #print(recent)
-                                        if key=="experience":
-                                            #print(key,"hfe wvhj")
-                                            bws=((comp_str[i][j][k][title][key]/(jdexp*12))*50)
-                                            
-                                            if exp_max-bws>=0:
-                                                score=score+bws
-                                                exp_max=50-bws
-                                            elif exp_max>=0 and exp_max-bws<0:
-                                                score=score+exp_max
-                                                exp_max=0
-                                        if key=="CategoryCode":
-                                            #print(key,"dskjbfk")
-                                            if comp_str[i][j][k][title][key]>=jdcc:
+                                if zz!='':
+                                    #print("in list")
+                                    if zz in resume_list:
+                                        #print(zz)
+                                        count=count+1
+                                        for key in comp_str[i][j][k][title]:
+                                            if key!="experience" and key!="CategoryCode":
+                                                 #print(key,len(key),type(comp_str[i][j][k][title][key]),"dsv ")
+                                                 currentMonth = datetime.now().month
+                                                 currentYear = datetime.now().year
+                                                 ld=str(currentYear)+"-"+str(currentMonth)
+                                                 #sd=value.split("-")
+                                                 if len(key)==4:
+                                                     sd=comp_str[i][j][k][title][key]+"-00"
+                                                     print(sd,"fdkb")
+                                                 sd=comp_str[i][j][k][title][key].split("-")
+                                                 ld=ld.split("-")
+                                                 #print(sd,ld)
+                                                 sd=sd[:2]
+                                                 ld=ld[:2]
+                                                 nl=[]
                                                 
-                                                if comp_str[i][j][k][title][key] in cat_list:
-                                                    index=cat_list.index(comp_str[i][j][k][title][key])+1
-                                                    len_l=len(cat_list)
-                                                    score=score+((((index*(index+1))/2)/((len_l*(len_l+1))/2))*10) 
-                                            if comp_str[i][j][k][title][key]<jdcc:
-                                                if comp_str[i][j][k][title][key] in cat_list:
-                                                    index=cat_list.index(comp_str[i][j][k][title][key])+1
-                                                    len_l=len(cat_list)
-                                                    score=score+((((index*(index+1))/2)/((len_l*(len_l+1))/2))*7.5) 
-                                    #resl.append(score)   
+                                                 #print(sd,ld)
+                                                 for _ in range(len(sd)):
+                                                     nl.append(int(ld[_])-int(sd[_]))
+                                                 nl[0]=nl[0]*12
+                                                 new_recent=nl[0]+nl[1]
+                                                 if new_recent<recent:
+                                                     recent=new_recent/12
+                                                 #resl.append(recent)
+                                                 #print(recent)
+                                            if key=="experience":
+                                                #print(key,"hfe wvhj")
+                                                if jdexp!='':
+                                                    if comp_str[i][j][k][title][key]>(int(jdexp)*12):
+                                                        
+                                                        score=score+50
+                                                        break
+                                                    if comp_str[i][j][k][title][key]<=(int(jdexp)*12):
+                                                        bws=((comp_str[i][j][k][title][key]/(int(jdexp)*12))*50)
+                                                        if exp_max-bws>=0:
+                                                            score=score+bws
+                                                            exp_max=50-bws
+                                                        elif exp_max>=0 and exp_max-bws<0:
+                                                            score=score+exp_max
+                                                            exp_max=0
+                                                if jdexp=='':
+                                                    print("no exp")
+                                                    if totalexp!=0:
+                                                        score=score+((comp_str[i][j][k][title][key]/(totalexp))*37.5)
+                                            if key=="CategoryCode":
+                                                #print(key,"dskjbfk")
+                                                if jdcc!='':
+                                                    
+                                                    if comp_str[i][j][k][title][key]>=jdcc:
+                                                        
+                                                        if comp_str[i][j][k][title][key] in cat_list:
+                                                            index=cat_list.index(comp_str[i][j][k][title][key])+1
+                                                            len_l=len(cat_list)
+                                                            score=score+((((index*(index+1))/2)/((len_l*(len_l+1))/2))*10) 
+                                                    if comp_str[i][j][k][title][key]<jdcc:
+                                                        if comp_str[i][j][k][title][key] in cat_list:
+                                                            index=cat_list.index(comp_str[i][j][k][title][key])+1
+                                                            len_l=len(cat_list)
+                                                            score=score+((((index*(index+1))/2)/((len_l*(len_l+1))/2))*7.5) 
+                                                if jdcc=='':
+                                                     print("no cat")
+                                                     if comp_str[i][j][k][title][key] in cat_list:
+                                                            index=cat_list.index(comp_str[i][j][k][title][key])+1
+                                                            len_l=len(cat_list)
+                                                            score=score+((((index*(index+1))/2)/((len_l*(len_l+1))/2))*10) 
+                                    #score=(score*count)/cc
+                                        print(score)
+                                    if zz not in resume_list:
+                                        #print(z)
+                                        #print("not in list")
+                                        for key in comp_str[i][j][k][title]:
+                                            if key!="experience" and key!="CategoryCode":
+                                                 #print(key,len(key),type(comp_str[i][j][k][title][key]),"dsv ")
+                                                 currentMonth = datetime.now().month
+                                                 currentYear = datetime.now().year
+                                                 ld=str(currentYear)+"-"+str(currentMonth)
+                                                 #sd=value.split("-")
+                                                 if len(key)==4:
+                                                     sd=comp_str[i][j][k][title][key]+"-00"
+                                                     print(sd,"fdkb")
+                                                 sd=comp_str[i][j][k][title][key].split("-")
+                                                 ld=ld.split("-")
+                                                 #print(sd,ld)
+                                                 sd=sd[:2]
+                                                 ld=ld[:2]
+                                                 nl=[]
+                                                
+                                                 #print(sd,ld)
+                                                 for _ in range(len(sd)):
+                                                     nl.append(int(ld[_])-int(sd[_]))
+                                                 nl[0]=nl[0]*12
+                                                 new_recent=nl[0]+nl[1]
+                                                 if new_recent<recent:
+                                                     recent=new_recent/12
+                                                 #resl.append(recent)
+                                                 #print(recent)
+                                            if key=="experience":
+                                                #print(key,"hfe wvhj")
+                                                if jdexp!='':
+                                                    if comp_str[i][j][k][title][key]>(int(jdexp)*12):
+                                                        score=score+50
+                                                        break
+                                                    if comp_str[i][j][k][title][key]<=(int(jdexp)*12):
+                                                        bws=((comp_str[i][j][k][title][key]/(int(jdexp)*12))*37.5)
+                                                        if exp_max-bws>=0:
+                                                            score=score+bws
+                                                            exp_max=50-bws
+                                                        elif exp_max>=0 and exp_max-bws<0:
+                                                            score=score+exp_max
+                                                            exp_max=0
+                                                if jdexp=='':
+                                                    #print("no exp")
+                                                    if totalexp!=0:
+                                                        score=score+((comp_str[i][j][k][title][key]/(totalexp))*28.125)
+                                            if key=="CategoryCode":
+                                                #print(key,"dskjbfk")
+                                                if jdcc!='':
+                                                    
+                                                    if comp_str[i][j][k][title][key]>=jdcc:
+                                                        
+                                                        if comp_str[i][j][k][title][key] in cat_list:
+                                                            index=cat_list.index(comp_str[i][j][k][title][key])+1
+                                                            len_l=len(cat_list)
+                                                            score=score+((((index*(index+1))/2)/((len_l*(len_l+1))/2))*7.5) 
+                                                    if comp_str[i][j][k][title][key]<jdcc:
+                                                        if comp_str[i][j][k][title][key] in cat_list:
+                                                            index=cat_list.index(comp_str[i][j][k][title][key])+1
+                                                            len_l=len(cat_list)
+                                                            score=score+((((index*(index+1))/2)/((len_l*(len_l+1))/2))*5.625) 
+                                                if jdcc=='':
+                                                     #print("no cat")
+                                                     if comp_str[i][j][k][title][key] in cat_list:
+                                                            index=cat_list.index(comp_str[i][j][k][title][key])+1
+                                                            len_l=len(cat_list)
+                                                            score=score+((((index*(index+1))/2)/((len_l*(len_l+1))/2))*7.5) 
+                                    print(score)
+                                #score=(score*count)/cc
+                        #resl.append(score)
+                        #score=(score*count)/cc 
+                               
+                                if zz=='':
+                                    
+                                    for key in comp_str[i][j][k][title]:
+                                            if key!="experience" and key!="CategoryCode":
+                                                 #print(key,len(key),type(comp_str[i][j][k][title][key]),"dsv ")
+                                                 currentMonth = datetime.now().month
+                                                 currentYear = datetime.now().year
+                                                 ld=str(currentYear)+"-"+str(currentMonth)
+                                                 #sd=value.split("-")
+                                                 if len(key)==4:
+                                                     sd=comp_str[i][j][k][title][key]+"-00"
+                                                     print(sd,"fdkb")
+                                                 sd=comp_str[i][j][k][title][key].split("-")
+                                                 ld=ld.split("-")
+                                                 #print(sd,ld)
+                                                 sd=sd[:2]
+                                                 ld=ld[:2]
+                                                 nl=[]
+                                                
+                                                 #print(sd,ld)
+                                                 for _ in range(len(sd)):
+                                                     nl.append(int(ld[_])-int(sd[_]))
+                                                 nl[0]=nl[0]*12
+                                                 new_recent=nl[0]+nl[1]
+                                                 if new_recent<recent:
+                                                     recent=new_recent/12
+                                                 #resl.append(recent)
+                                                 #print(recent)
+                                            if key=="experience":
+                                                #print(key,"hfe wvhj")
+                                                if jdexp!='':
+                                                    if comp_str[i][j][k][title][key]>(int(jdexp)*12):
+                                                        score=score+37.5
+                                                        break
+                                                    if comp_str[i][j][k][title][key]<=(int(jdexp)*12):
+                                                        bws=((comp_str[i][j][k][title][key]/(int(jdexp)*12))*37.5)
+                                                        if exp_max-bws>=0:
+                                                            score=score+bws
+                                                            exp_max=37.5-bws
+                                                        elif exp_max>=0 and exp_max-bws<0:
+                                                            score=score+exp_max
+                                                            exp_max=0
+                                                if jdexp=='':
+                                                    if totalexp!=0:
+                                                        score=score+((comp_str[i][j][k][title][key]/(totalexp))*28.125)
+                                            if key=="CategoryCode":
+                                                #print(key,"dskjbfk")
+                                                if jdcc!='':
+                                                    
+                                                    if comp_str[i][j][k][title][key]>=jdcc:
+                                                        
+                                                        if comp_str[i][j][k][title][key] in cat_list:
+                                                            index=cat_list.index(comp_str[i][j][k][title][key])+1
+                                                            len_l=len(cat_list)
+                                                            score=score+((((index*(index+1))/2)/((len_l*(len_l+1))/2))*7.5) 
+                                                    if comp_str[i][j][k][title][key]<jdcc:
+                                                        if comp_str[i][j][k][title][key] in cat_list:
+                                                            index=cat_list.index(comp_str[i][j][k][title][key])+1
+                                                            len_l=len(cat_list)
+                                                            score=score+((((index*(index+1))/2)/((len_l*(len_l+1))/2))*5.625) 
+                                                if jdcc=='':
+                                                     if comp_str[i][j][k][title][key] in cat_list:
+                                                            index=cat_list.index(comp_str[i][j][k][title][key])+1
+                                                            len_l=len(cat_list)
+                                                            score=score+((((index*(index+1))/2)/((len_l*(len_l+1))/2))*7.5) 
+                                                         
+                                    #resl.append(score)  
+                                    
+                        score=(score*count)/cc         
             #print(f,recent,score)
+        #print(cc,count)
+                        
         if recent!=1000:
             if recent==0:
                 score=score+10
             else:
                 score=score+(10/recent)
-                #score=score+((recent*20)/100)
-            #score=score+((recent*50)/100)
-        resd[i]=score
+
+        resd[i]=score/len(inputlist)
     #print(resd)                            
     resd=dict( sorted(resd.items(), key=operator.itemgetter(1),reverse=True))
     return resd
                                         
-                                
+print(work_exp([
+
+{"JobPosition":"Senior Software Engineer",
+"CategoryCode":"",
+"Experience":"8"
+
+},
+{"JobPosition":"Technical Lead",
+"CategoryCode":"",
+"Experience":""
+
+},
+{"JobPosition":"Software Engineer",
+"CategoryCode":"",
+"Experience":""
+
+},
+{"JobPosition":"Software Development Engineer",
+"CategoryCode":"",
+"Experience":""
+
+}
+
+])  )                             
                             
                             
                     
