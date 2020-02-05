@@ -137,7 +137,7 @@ def work_exp(inputlist):
     cat_list=["Entry Level","Experienced (non-manager)",
               "Senior (more than 5 years experience)","Manager",
               "Senior Manager (more than 5 years management experience)",
-              "Executive (VP, Dept. Head)",
+              "Executive (VP, Dept. Head)","Executive (VP, Dept Head)",
               "Senior Executive (President, C-level)"]    
     for i in comp_str:
         score=0
@@ -438,11 +438,11 @@ def work_exp(inputlist):
     #print(resd)                            
     resd=dict( sorted(resd.items(), key=operator.itemgetter(1),reverse=True))
     return resd
-'''                                    
+                                
 k=work_exp([
 
 {"JobPosition":"Software Engineer",
-"CategoryCode":"",
+"CategoryCode":"Experienced (non-manager)",
 "Experience":"4"
 
 },
@@ -457,7 +457,7 @@ k=work_exp([
 
 },
 {"JobPosition":"Senior Software Engineer",
-"CategoryCode":"",
+"CategoryCode":"Executive (VP, Dept Head)",
 "Experience":"4"
 
 }
@@ -486,7 +486,7 @@ k=work_exp([
 "Experience":""
 
 }  ])  
-                  
+'''
 print(k)
 print(len(k))                            
 print("mohit",k["5d44912169e2e_Mohit Full Stack Developer and Techno Manager.docx"])                           
