@@ -164,18 +164,12 @@ def work_exp(inputlist):
                                     #print(zz)
                                     if z["CompanyTier"]=='':
                                         jdtier=3
-                                        print(company_tier)
-                                        if company_tier>=jdtier:
-                                            score=score+10
-                                        elif company_tier<jdtier:
-                                            score=score/company_tier
+                                        #print(company_tier)
+                                        score=10+math.tanh((company_tier-jdtier)/1.5)
                                     elif z["CompanyTier"]!='':
                                         jdtier=int(z["CompanyTier"])
                                         #print(company_tier,jdtier)
-                                        if company_tier>=jdtier:
-                                            score=score+10
-                                        elif company_tier<jdtier:
-                                            score=score/company_tier
+                                        score=10+math.tanh((company_tier-jdtier)/1.5)
                                     count=count+1
                                     for key in comp_str[i][j][k][title]:
                                         
@@ -268,21 +262,21 @@ k=work_exp([
 ]) 
 '''
 k=work_exp([
-
-{"JobPosition":"",
-"CompanyTier":"2",
-"Experience":"5"
-
+{"JobPosition":"Software Development Engineer",
+"CompanyTier":"3",
+"Experience":"2"
+ 
 },
 
-{"JobPosition":"",
-"CompanyTier":"3",
+
+{"JobPosition":"Software Engineer",
+"CompanyTier":"",
 "Experience":"4"
 
 },
-{"JobPosition":"Software Engineer",
-"CompanyTier":"1",
-"Experience":"2"
+{"JobPosition":"",
+"CompanyTier":"",
+"Experience":""
  
 }
 
