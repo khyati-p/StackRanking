@@ -116,18 +116,6 @@ def work_exp(inputlist):
                 gd[f]=ud
             else:
                 resd[f]=0
-        #print(comp_str)
-   # for k,v in comp_str.items():
-    #    print(k,":-",v)
-     #   print()
-      
- 
-    
-    cat_list=["Entry Level","Experienced (non-manager)",
-              "Senior (more than 5 years experience)","Manager",
-              "Senior Manager (more than 5 years management experience)",
-              "Executive (VP, Dept. Head)","Executive (VP, Dept Head)",
-              "Senior Executive (President, C-level)"]  
     
     for i in comp_str:
         score=0
@@ -135,11 +123,14 @@ def work_exp(inputlist):
         njdscore=0
         #resl={}
         recent=1000
-        
+        orgcount=0
         for j in comp_str[i]:
             #print(j)
+            orgcount=orgcount+1
             company_tier=db.find_one({"key":"CompanyTier"})["CompanyTier"].get(j)
-
+           # print(company_tier)
+            if company_tier==None:
+                company_tier=3
             for k in range(len(comp_str[i][j])):
                 #for _ in range(len(comp_str[i][j][k])):  
                 totalexp=0
@@ -152,7 +143,6 @@ def work_exp(inputlist):
                     count=0
                     nlcount=0
                     njdcount=0
-                    matchexp=0
                     if title !="":
                         resume_list=title.split("/")
                         #print(resume_list)
@@ -166,22 +156,30 @@ def work_exp(inputlist):
                                     jdexp=0
                             
                             
-                            if z["CompanyTier"]=='':
-                                jdtier=3
-                            elif z["CompanyTier"]!='':
-                                jdtier=z["CompanyTier"]
+                            
                            
                             if z['JobPosition']!="":
                                 #print("in list")
                                 if z['JobPosition'] in resume_list:
                                     #print(zz)
+                                    if z["CompanyTier"]=='':
+                                        jdtier=3
+                                        print(company_tier)
+                                        if company_tier>=jdtier:
+                                            score=score+10
+                                        elif company_tier<jdtier:
+                                            score=score/company_tier
+                                    elif z["CompanyTier"]!='':
+                                        jdtier=int(z["CompanyTier"])
+                                        #print(company_tier,jdtier)
+                                        if company_tier>=jdtier:
+                                            score=score+10
+                                        elif company_tier<jdtier:
+                                            score=score/company_tier
                                     count=count+1
                                     for key in comp_str[i][j][k][title]:
-                                        if key=="CompanyTier":
-                                            if company_tier>=jdtier:
-                                                score=score+10
-                                            elif company_tier<jdtier:
-                                                score=score/company_tier
+                                        
+                                            
                                         if key!="experience" and key!="CategoryCode":
                                              #print(key,len(key),type(comp_str[i][j][k][title][key]),"dsv ")
                                              currentMonth = datetime.now().month
@@ -209,12 +207,13 @@ def work_exp(inputlist):
                                                 score=score+10/(1+0.2*recent)
                                      
                                         if key=="experience":
-                                            #print(key,"hfe wvhj")
-                                            if jdexp!='':
-                                                if comp_str[i][j][k][title][key]>=(int(jdexp)*12):
-                                                    bws=comp_str[i][j][k][title][key]/12
-                                                    extra=(bws-(int(jdexp)))/5
-                                                    score=score+35+5*math.tanh(extra)
+                                            #print(comp_str[i][j][k][title][key],"hfe wvhj")
+                                            #if jdexp!='':
+                                                #if comp_str[i][j][k][title][key]>=(int(jdexp)*12):
+                                            bws=comp_str[i][j][k][title][key]/12
+                                            extra=(bws-(int(jdexp)))/5
+                                            score=score+45+(5*math.tanh(extra))
+                                            #print(35+(5*math.tanh(extra)))
                                                    
                                                 #if comp_str[i][j][k][title][key]<=(int(jdexp)*12):
                                                  #   score=score+25
@@ -225,37 +224,66 @@ def work_exp(inputlist):
                                                 score=score+20
                                             '''    
                                 else:
-                                    nlcount=nlcount+1
-                                    nlscore=nlscore+10
+                                   nlcount=nlcount+1
+                                   nlscore=nlscore+10
                            
                             elif z['JobPosition']=="":
                                 njdcount=njdcount+1
-                                njdscore=njdscore+10
+                                njdscore=njdscore+20
 
                         if count!=0:
                             score=score/count
+                            #print(score)
                         if nlcount!=0:
-                            score=nlscore/nlcount
-                        if njdcount!=0:
-                            score=njdscore/njdcount
-       
+                            nlscore=nlscore/nlcount
+                   
+            if njdcount!=0:
+                njdscore=njdscore/njdcount
+        score=score+nlscore+njdscore
+        #score=score/orgcount
         resd[i]=score/len(inputlist)
     #print(resd)                            
     resd=dict( sorted(resd.items(), key=operator.itemgetter(1),reverse=True))
     return resd
-                                
+'''                             
+k=work_exp([
+
+{"JobPosition":"Software Engineer",
+"CompanyTier":"3",
+"Experience":"5"
+
+},
+
+{"JobPosition":"Senior Software Engineer",
+"CompanyTier":"3",
+"Experience":"4"
+
+},
+{"JobPosition":"Software Development Engineer",
+"CompanyTier":"3",
+"Experience":"2"
+ 
+}
+
+]) 
+'''
 k=work_exp([
 
 {"JobPosition":"",
-"CompanyTier":"",
-"Experience":""
+"CompanyTier":"2",
+"Experience":"5"
 
 },
 
 {"JobPosition":"",
-"CompanyTier":"",
-"Experience":""
+"CompanyTier":"3",
+"Experience":"4"
 
+},
+{"JobPosition":"Software Engineer",
+"CompanyTier":"1",
+"Experience":"2"
+ 
 }
 
 ]) 
